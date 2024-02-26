@@ -1,0 +1,12 @@
+redis is db used to persist data
+why redis: redis is fast
+redis is fast for 3 reasons:
+    1- all data is stored in memory (not hard drive and memory)
+        disadvantages: can't work with dataset larger than memory of pc
+    2- organize/store all data inside simple data structure
+    3- fast because it is very simple, do not have a lot of features (to make it easy) but slower
+
+redis.com: make a subscription then a db
+    use rbook.com
+    run rbook on your local machine
+    use redis-cli
