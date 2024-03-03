@@ -1,0 +1,32 @@
+note: facade pattern
+
+SET key value
+
+SET message 'hii there'
+get message
+
+commands for strings:
+redis.io/commands
+
+capitalized words are keywords (SET)
+| means or
+[] means optional
+
+set color green get // get prev value of color
+set color 'hi there1' xx get // xx to only set it if it is already exist, nx if it doesn't exist
+
+set color red ex 2 // delete after 2 seconds
+// alternatively: SETEX color 2 red 
+
+MSET color red model toyota // multiple set
+MSETNX
+
+MGET color model
+DEL color
+
+GETRANGE color 0 2 // get first 3 letters
+setRange model 2 blue // replace from index 2 the next 4 letters with blue
+
+INCR
+DECR
+INCRBYFLOAT
