@@ -1,0 +1,15 @@
+hashes will have values as only strings or numbers
+
+HSET company name 'Concrete co' age 1915 industry materials revenue 5.3
+
+HGET company revenue
+HGETALL company
+HEXISTS company name // 1 or 0
+DEL company
+HDEL company name
+
+HINCRBY // if it doesn't exist then the key will be initialized with the value provided
+HINCRBYFLOAT // if it doesn't exist then the key will be initialized with the value provided
+HSTRLEN company industry
+HKEYS company 
+HVALS company 
