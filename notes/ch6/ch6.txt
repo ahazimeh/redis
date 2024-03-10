@@ -1,0 +1,11 @@
+issues with hset:
+await client.hSet('car', {
+    color: 'red',
+    year: 1950,
+    engine: { cylinder: 8 },
+    owner: null,
+    service: undefined
+});
+// the above code will cause error due to null and undefined
+
+HGETALL returns {} when there is no data stored rather than returning null
