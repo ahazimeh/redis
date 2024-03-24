@@ -1,0 +1,26 @@
+for other languages like python you can use;
+
+client = redis. Redis(...)
+pipe = client.pipeline()
+pipe.set('foo', 'bar')
+pipe.get('bing')
+pipe.execute()
+
+// node-redis
+const results = await Promise.all([
+client.get('color'),
+client.get('name')
+]);
+
+{https://github.com/redis/node-redis/issues/2674
+exec will execute them with MULTI at the start and EXEC at the end, while execAsPipeline will execute them "normally" and collect all the results into an array.
+
+This definitely should be in the docs, I'll leave this issue open for now..
+}
+
+{https://github.com/redis/node-redis/issues/1796
+const [getReply, setReply] = await client.multi()
+  .get('1')
+  .set('2', '2')
+  .execAsPipeline();
+}
