@@ -1,0 +1,27 @@
+Reasons to Store as Hash
+    The record has many attributes
+    A collection of these records have to be sorted many different ways
+    Often need to access a single record at a time
+
+Don't Use Hashes When...
+    The record is only for counting or enforcing uniqueness
+    Record stores only one or two attributes
+    Used only for creating relations between different records
+    The record is only used for time series data
+
+for node redis: for new Date() redis will automatically call toString() on it
+
+const serialize = (user: CreateUserAttrs) => {
+	return {
+		username: user.username,
+		password: user.password
+	};
+};
+
+const deserialize = (id: string, user: { [key: string]: string }) => {
+	return {
+		id,
+		username: user.username,
+		password: user.password
+	};
+};
