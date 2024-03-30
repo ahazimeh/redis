@@ -1,0 +1,26 @@
+sets:
+SADD colors red
+SMEMBERS colors
+
+SADD colors:1 red blue orange
+SADD colors:2 blue green purple
+SADD colors:3 blue red purple
+SUNION colors:1 colors:2 colors:3 // get unions
+SINTER colors:1 colors:2 colors:3 // get intersection
+SDIFF colors:1 colors:2 colors:3 // exist in first and only first set
+SINTERSTORE colors:results colors:1 colors:2 colors:3 // save intersection in colors:results, I get back nb of results
+SISMEMBER colors:1 red // 1 or 0
+SMISMEMBER colors:1 red green blue // for multiple SISMEMBER
+SCARD colors:1 // get nb of elements inside colrs:1
+SREM colors:1 red // remove red from colors:1
+SSCAN colors:1 0 COUNT 2 // for pagination but while testing it is always returning everything (to be tested)
+SINTERCARD // does intersection and count nb of el inside intersection (to be tested)
+SPOP colors:1 2 // removes 2 random element
+SRANDMEMBER colors:1 2 // return 2 elements randomly
+SMOVE will move an element from 1 set to another
+
+Set Use Cases:
+1-Enforcing uniqueness of any value
+2-Creating a relationship between different records
+3-Finding common attributes between different things
+4-General list of elements where order doesn't matter
