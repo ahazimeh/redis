@@ -1,0 +1,15 @@
+zadd products 45 monitor
+ZSCORE products monitor
+ZREM products monitor1 
+DEL products
+ZCARD products // count of products
+ZCOUNT products 0 50 // count of products between 0 and 50
+ZCOUNT products (44 (46 // same but exclude these 2 numbers
+ZCOUNT products -inf inf
+ZPOPMIN products 2
+ZPOPMAX products 2
+ZRANGE products 1 2 WITHSCORES // index 1 till 2 with scores
+ZRANGE products 1 12 WITHSCORES BYSCORE // when adding BYSCORE then 1 and 12 refers to scores and not indexes
+ZRANGE products 1 2 rev // reverse
+ZRANGE products 0 60 BYSCORE LIMIT 1(skip) 2(limit)
+ZRANGEBYLEX // will not be used a lot
