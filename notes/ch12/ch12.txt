@@ -1,0 +1,7 @@
+sorted sets use cases:
+    Tabulating 'the most' or 'the least' of a collection of hashes
+        you can store set of hashes by saving the keys for a hash and giving it a score
+    Creating relationships between records, sorted by some criteria
+        same as sets but with sorting (such as to get common books sorted with most reviews)
+parseInt(id, 16) // base 16 to 10
+const id = decimalId.toString(16) // base 10 to 16
