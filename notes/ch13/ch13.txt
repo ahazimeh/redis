@@ -1,0 +1,28 @@
+Loading Relational Data:
+    Create a simple pipeline that does a bunch of 'HGETALL's
+    Use the 'SORT' command in a very clever way
+    
+SORT books:likes ALPHA // sort a set, list or sorted set by alphabatics
+SORT books:likes LIMIT 1 2 ALPHA // 1 is skip 1, 2 is give me 2
+
+    HSET books:good title 'Good Book' year 1950
+    HSET books:bad title 'Bad Book' year 1930
+    HSET books:ok title 'OK Book' year 1940
+
+    ZADD books:likes 999 good
+    ZADD books:likes 0 bad
+    ZADD books:likes 40 ok 
+        SORT books:likes BY books:*->year // so here * means the result of books:likes (good, bad, ok)
+
+        SORT books:likes BY books:*->year DESC GET books:*->title GET books:*->year GET # // # is the id
+        // I can put BY nosort to not do any sort but only use the SORT command as join (nosort is a convention, adding any key that doesn't exist will do the trick)
+        // note in the code:
+        const results = await client.sort(itemsByViewsKey(), {
+            GET: ['#', `${itemsKey('*')}->name`, `${itemsKey('*')}->views`],
+            BY: 'score',
+            DIRECTION: order,
+            LIMIT: {
+                offset,
+                count
+            }
+        });
