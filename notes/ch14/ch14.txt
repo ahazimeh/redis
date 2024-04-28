@@ -1,0 +1,6 @@
+HyperLogLog
+PFADD vegetables potato
+PFCOUNT vegetables 
+
+HyperLogLog is always 12kb
+downside the result of PFCOUNT will be wrong by around 0.81%
