@@ -1,0 +1,36 @@
+$0 is the selected element inside the inspector
+$0.click()
+atomic updates:
+    HINCRBY
+    HSETNX allows us to set a property only if it hasn't been set before
+transations:
+    transations can't be undone as other databases
+    MULTI
+    SET color red
+    SET count 5
+    EXEC
+
+    WATCH color
+    SET color blue
+    MULTI
+    SET color red
+    SET count 5
+    EXEC
+    // here I will get null back because the color did change inside the transaction
+    in this way color will stay blue because the color did change before the transaction
+
+
+       // new connection that is being used for redis
+       // this executeIsolated is needed with watch so the next requests watch don't overwrite each others
+      	return client.executeIsolated(async (isolatedClient) => {
+            await isolatedClient.watch(itemsKey(attrs.itemId));
+    		return isolatedClient
+			.multi()
+			.rPush(bidHistoryKey(attrs.itemId), serialized)
+			.hSet(itemsKey(item.id), {
+				bids: item.bids + 1,
+				price: attrs.amount,
+				highestBidUserId: attrs.userId
+			})
+			.exec();
+        })
