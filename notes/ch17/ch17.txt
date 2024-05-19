@@ -1,0 +1,136 @@
+print("Hello World!")
+local sum = 1+1
+print(sum)
+if sum > 0 then
+
+end
+if sum ~= 0 // not equal
+== // is equal
+
+0 and '' are treated as truthy values
+if 0 and '' then ... truthy
+if false or not true then // falsy
+nil // same as null or undefined // falsy
+
+// array
+local colors = {'red','green','blue'}
+print(colors[1]) // red, 1 is first index
+print(#colors) // count 3
+
+table.insert(colors,'orange') // push to end
+print(colors[4]) //orange
+
+for i, v in ipairs(colors) do
+    print(i, v)
+end // is is index and v is value, 1    red ...
+for i=5, 10 do // loop from 5 to 10
+
+objects (tables or associative arrays) // they are called tables
+
+local user = {id='a1',name='samantha'}
+print(user['id']) // a1
+for k, v in pairs(user) do
+    print(k,v)
+end
+
+// redis
+SCRIPT LOAD 'return 1 + 1'
+EVALSHA c301e0c5bc3538d2bad3fdbf2e281887e643ada4 0
+// args have to be strings
+
+SCRIPT LOAD 'return 1 + tonumber(ARGV[1])'
+EVALSHA f54696c104acb23787e4d627c487221c6f79ace7 0 "3"
+
+SET color red
+SCRIPT LOAD 'return redis.call("GET", "color")' // run redis commands using lua
+EVALSHA 5c319cc258f79a4a2387edac10122cb4ee3770ea 0 // red
+// but this code should not be used in production because redis needs to know exactly which keys we want to access ahead of time
+// the example above works but behind the scenes it will get a bit buggy and eventually cause issues
+
+SET color red
+SCRIPT LOAD 'return redis.call("GET", KEYS[1])'
+EVALSHA d1ad8397c172dc0a63e271f0c4c4250ca8d5d1fb 1 color // 1 is the key
+
+when to use lua scripts:
+    1-limit the amount of data exchanged between server + redis
+    2-solving some concurrency issues
+    3-minimizing the number of round trips between server + redis
+    4-??? // they are flexible
+scripts down sides
+    1-keys must be known ahead of time
+    2-tough to test scripts
+    3-loss of language features(E.g. type checking with Typescript)
+    4-Another language to deal with (Lua)
+
+steps:
+    1-name of fn
+    2-the script
+    3-number of keys that will be provided
+    4-instructions on how to pass args to the script
+    5-instructions on how to parse the response from the script
+
+// scripts section
+const client = createClient({
+	socket: {
+		host: process.env.REDIS_HOST,
+		port: parseInt(process.env.REDIS_PORT)
+	},
+	password: process.env.REDIS_PW,
+	scripts: {
+		addOneAndStore: defineScript({
+			NUMBER_OF_KEYS: 1,
+			SCRIPT: `
+			return redis.call('SET', KEYS[1], 1+ tonumber(ARGV[1]))
+			`,
+			transformArguments(key: string, value: number) {
+				return [key, value.toString()];
+			},
+			transformReply(reply: any) {
+				return reply;
+			}
+		})
+	}
+});
+
+client.on('connect', async () => {
+	console.log('asdasd');
+	await client.addOneAndStore('books:count', 5);
+	const result = await client.get('books:count');
+	console.log(result);
+});
+
+//
+	// const inserted = await client.pfAdd(itemsViewsKey(itemId), userId);
+
+	// if (inserted) {
+	// 	return Promise.all([
+	// 		client.hIncrBy(itemsKey(itemId), 'views', 1),
+	// 		client.zIncrBy(itemsByViewsKey(), 1, itemId)
+	// 	]);
+	// }
+	return client.incrementView(itemId, userId);
+
+	// in the strips section:
+			incrementView: defineScript({
+			NUMBER_OF_KEYS: 3,
+			SCRIPT: `
+			local itemsViewsKey = KEYS[1]
+			local itemsKey = KEYS[2]
+			local itemsByViewsKey = KEYS[3]
+			local itemId = ARGV[1]
+			local userId = ARGV[2]
+
+			local inserted = redis.call('PFADD',itemsViewsKey,userId)
+
+			if inserted ==1 then
+			redis.call('HINCRBY',itemsKey,'views',1)
+			redis.call('ZINCRBY',itemsByViewsKey,1,'itemId')
+			end
+			`,
+			transformArguments(itemId: string, userId: string) {
+				return [itemsViewsKey(itemId), itemsKey(itemId), itemsByViewsKey(), itemId, userId];
+			},
+			transformReply() {
+				// we are not returning anything
+			}
+		})
