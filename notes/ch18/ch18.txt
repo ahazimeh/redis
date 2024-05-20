@@ -1,0 +1,10 @@
+red lock algorithm
+redis.io/docs/reference/patterns/distributed-locks -> https://redis.io/docs/latest/develop/use/patterns/distributed-locks/
+
+disadvantages of watch
+    watch command can slow down our redis server
+    increase the load on our redis server when retry
+
+// generate random string
+import { randomBytes } from 'crypto'
+const token = randomBytes(6).toString('hex')

@@ -99,6 +99,12 @@ client.on('connect', async () => {
 	console.log(result);
 });
 
+// scripting design pattern:
+Identify all the keys and arguments you want to access
+assign the keys (KEYS) and arguments (ARGV) to well labeled variables at the top of the script
+write your logic
+don't forget to return a value if you need to
+
 //
 	// const inserted = await client.pfAdd(itemsViewsKey(itemId), userId);
 
