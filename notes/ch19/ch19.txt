@@ -49,8 +49,19 @@ Numeric Queries
 @color:{red} // do a tag search on 'color'
 @year:[1955 1960] // do a numeric search on 'year'
 
- '@year:[1955 1960]' // inclusive
- '@year:[(1955 (1960]' // exclusive
- '@year:[1955 +inf]' // greater than or equal to 1955
- '@year:[-inf 1955]'
- '-@year:[1955 1980]' // not including 1955 - 1980
+'@year:[1955 1960]' // inclusive
+'@year:[(1955 (1960]' // exclusive
+'@year:[1955 +inf]' // greater than or equal to 1955
+'@year:[-inf 1955]'
+'-@year:[1955 1980]' // not including 1955 - 1980
+
+Tag Queries
+'@color{blue}'
+'-@color{blue}'
+'@color{red | blue}' // or
+'@color{red\ blue}' // Escape space (red blue)
+
+note: All 'stop' words are removed from tag and text queries!!
+a, is, the, an, and, are, as, at, be, but, by, for,
+if, in, into, it, no, not, of, on, or, such, that, their,
+then, there, these, they, this, to, was, will, with
