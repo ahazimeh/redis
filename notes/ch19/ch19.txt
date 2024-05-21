@@ -35,3 +35,10 @@ FT.CREATE
     ON HASH / ON JSON
     PREFIX 1 cars# // 1 means we can have multiple different prefixes
     SCHEMA: describe the fields that should be indexed for each hash (don't have to list the schema of every field - only the onces we want to search)
+
+type of fields:
+    NUMERIC // we can do numeric query
+    GEO // geographic coordinates for geo queries
+    VECTOR // find similarity queries
+    TAG // Used for exact string lookups (for querying)
+    TEXT // Supports fuzzy search, typos, etc (for searching)
