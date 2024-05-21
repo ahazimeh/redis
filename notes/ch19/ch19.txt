@@ -24,7 +24,7 @@ FT.CREATE idx:cars on HASH PREFIX 1 cars#
 
 FT.SEARCH idx:cars '@name:(fast car)'
 FT.SEARCH idx:cars '@color:{blue}'
-FT.SEARCH idx:cars '@year:[blue]'
+FT.SEARCH idx:cars '@year:[1955 1960]'
 
 Querying vs Searching
     Querying: gives the exact result you ask for:
@@ -42,3 +42,15 @@ type of fields:
     VECTOR // find similarity queries
     TAG // Used for exact string lookups (for querying)
     TEXT // Supports fuzzy search, typos, etc (for searching)
+    
+Numeric Queries
+
+@name:(fast) // do a text search on 'name'
+@color:{red} // do a tag search on 'color'
+@year:[1955 1960] // do a numeric search on 'year'
+
+ '@year:[1955 1960]' // inclusive
+ '@year:[(1955 (1960]' // exclusive
+ '@year:[1955 +inf]' // greater than or equal to 1955
+ '@year:[-inf 1955]'
+ '-@year:[1955 1980]' // not including 1955 - 1980
