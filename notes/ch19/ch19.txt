@@ -1,0 +1,37 @@
+Redis Stack contains several modules by default
+    RedisSearch, RedisJSON, RedisGraph, RedisTimeSeries, RedisBloom
+depending on how you deploy/run your application you might not be able to use modules
+
+option 1: managed copy of redis
+aws or google cloud to handle everything // can't use modules
+option 2: to run a virtual machine or container, run redis inside so we can use modules
+downside, it requires setup by ourselves (backups, security updates...)
+option: 3, rely on company redis
+
+to use redi search
+    create an index, find all keys that starts with items:#
+    record some info about the fields: name, color, and price
+create index: FT.CREATE
+run a query: FT.SEARCH
+
+HSET cars#a1 name 'fast car' color red year 1950
+HSET cars#b1 name 'car' color red year 1960
+HSET cars#c1 name 'old car' color blue year 1970
+HSET cars#d1 name 'new car' color blue year 1990
+
+FT.CREATE idx:cars on HASH PREFIX 1 cars#
+    SCHEMA name TEXT year NUMERIC color TAG
+
+FT.SEARCH idx:cars '@name:(fast car)'
+FT.SEARCH idx:cars '@color:{blue}'
+FT.SEARCH idx:cars '@year:[blue]'
+
+Querying vs Searching
+    Querying: gives the exact result you ask for:
+    Searching: gives results that best answer your question:
+
+FT.CREATE
+    indexes ususally follow the naming convention idx:<thing>
+    ON HASH / ON JSON
+    PREFIX 1 cars# // 1 means we can have multiple different prefixes
+    SCHEMA: describe the fields that should be indexed for each hash (don't have to list the schema of every field - only the onces we want to search)
