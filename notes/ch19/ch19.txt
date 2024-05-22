@@ -65,3 +65,24 @@ note: All 'stop' words are removed from tag and text queries!!
 a, is, the, an, and, are, as, at, be, but, by, for,
 if, in, into, it, no, not, of, on, or, such, that, their,
 then, there, these, they, this, to, was, will, with
+spaces and punctuation are also removed
+
+https://snowballstem.org/demo.html // stimming fastly -> fast
+
+FT.SEARCH idx:cars 'fast' // query over all fields marked as text
+FT.SEARCH idx:cars '@name:(fast car)' // fast and car
+FT.SEARCH idx:cars '@name:(fast | car)' // fast or car
+FT.SEARCH idx:cars '-@name:(fast car)' // negation
+
+Fuzzy search // Levenshtein distance
+FT.SEARCH idx:cars '-@name:(%car%)' // % is not wild card
+
+FT.SEARCH idx:cars '@name:(%dar%)' // 1 mismatch allowed
+FT.SEARCH idx:cars '@name:(%%%dar%%%)' // 3 mismatch allowed // maximum we can have
+fa* // minimum 2 characters // can't do f*
+
+pre-processing search criteria
+    prefix search (autocomplete option)
+        ex: fast ca -> fast* | ca*
+    fuzzy search (results)
+        ex: fast dar -> %fast% | %dar%
