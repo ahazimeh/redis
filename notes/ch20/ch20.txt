@@ -1,0 +1,94 @@
+Index Creation in Apps
+  Figure out what prefix the index will use
+  Decide on the fields/types the index will look at
+  Make a function to create the index
+  Decide when to create the index
+
+
+export const createIndexes = async () => {
+	const indexes = await client.ft._list();
+
+	const exists = indexes.find((index) => index === itemsIndexKey());
+	if (exists) return;
+
+	return client.ft.create(
+		itemsIndexKey(),
+		{
+			name: {
+				type: SchemaFieldTypes.TEXT,
+        SORTABLE: true,
+			},
+			description: {
+				type: SchemaFieldTypes.TEXT,
+        SORTABLE: false,
+			},
+      ownerId: {
+        type: SchemaFieldTypes.TAG,
+        SORTABLE: false,
+      },
+      endingAt: {
+        type: SchemaFieldTypes.NUMERIC,
+        SORTABLE: true,
+      },
+      bids: {
+        type: SchemaFieldTypes.NUMERIC,
+        SORTABLE: true,
+      },
+      views: {
+        type: SchemaFieldTypes.NUMERIC,
+        SORTABLE: true,
+      },
+      price: {
+        type: SchemaFieldTypes.NUMERIC,
+        SORTABLE: true,
+      },
+      likes: {
+        type: SchemaFieldTypes.NUMERIC,
+        SORTABLE: true,
+      },
+		} as any ,
+		{
+			ON: 'HASH',
+			PREFIX: itemsKey('')
+		}
+	);
+};
+
+
+client.on('connect', async () => {
+	try {
+		await createIndexes();
+	} catch (err) {
+		console.error(err);
+	}
+});
+
+FT._LIST  // list of all indexes
+
+
+replaceAll(/[^a-zA-Z0-9 ]/g, '') // find all that is not alphanumeric or space and remove
+
+
+// with this syntax it is going to search for all text fields (so no need for @name)
+	const results = await client.ft.search(itemsIndexKey(), cleaned, {
+		LIMIT: {
+			from: 0, // offset
+			size: size
+		}
+	});
+
+TF-IDF // Term Frequency X Inverse Document Frequency = 2/6 X log(1 + 2/2) = .1
+
+(@name:(chair) => { $weight: 5.0 }) | (@description:(chair)) // apply more weight to name field rather than description
+
+	const query = `(@name:(${cleaned}) => {$weight: 5.0}) | (@description:(${cleaned}))`;
+
+FT.EXPLAINCLI idx:items 'chair'
+FT.EXPLAINCLI idx:items 'chair - desk'
+
+FT.EXPLAINCLI idx:items '@name: (chair) | @description: (chair)'
+FT.EXPLAINCLI idx:items '(@name: (chair)) | (@description: (chair))'
+
+FT.PROFILE idx:items Search query 'chairs' limit 0 0
+
+// sorting can be done by 1 field at a time
