@@ -17,3 +17,15 @@ XRANGE fruites 1720975574297-0 1720975574298-0
 XRANGE fruites (1720975574297-0 1720975574298-0 // ( to not exclude, // and same for end range
 XRANGE fruites 1720975574297-0 + // everything above 1720975574297-0
 XRANGE fruites - 1720975574297-0 // everything below 1720975574297-0
+
+2 problems:
+  standard streams deliver all messages to all consumers
+  handling consumer crashing
+Consumer Group
+  we will have some number of workers
+  unique name for different workers
+using consumer groups will insure that no 2 workers receiving the same message
+Steam log: creating log to where each message is getting sent
+  -I sent 123123-0 to 'emailer-1' and they acknowledged receipt
+  -I sent 999-0 to 'emailer-2' they didn't acknowledged receipt.
+  -Last Delivered ID for each worker
