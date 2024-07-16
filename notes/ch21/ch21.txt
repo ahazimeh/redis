@@ -1,0 +1,19 @@
+Streams
+  Kind of like a cross between a list and a sorted set
+  Used for communication between different servers
+  Most useful with 'consumer groups'
+  TONS AND TONS of tiny details
+
+XADD fruites * color red name strawberry
+
+XREAD count 1 STREAMS fruites 0-0 // read all messages in the stream
+
+// wait for up to 3 seconds for new data to be added
+XREAD BLOCK 3000 STREAMS fruites 1720975546055-0
+
+XREAD COUNT 5 BLOCK 3000 STREAMS fruites $ // $ means now
+
+XRANGE fruites 1720975574297-0 1720975574298-0
+XRANGE fruites (1720975574297-0 1720975574298-0 // ( to not exclude, // and same for end range
+XRANGE fruites 1720975574297-0 + // everything above 1720975574297-0
+XRANGE fruites - 1720975574297-0 // everything below 1720975574297-0
