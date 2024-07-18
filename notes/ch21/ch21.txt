@@ -29,3 +29,20 @@ Steam log: creating log to where each message is getting sent
   -I sent 123123-0 to 'emailer-1' and they acknowledged receipt
   -I sent 999-0 to 'emailer-2' they didn't acknowledged receipt.
   -Last Delivered ID for each worker
+
+XGROUP CREATE fruits fruits-group $ MKSTREAM
+// fruits: key of stream
+// fruits-group: name of the group
+// $: only handle messages from now on
+// MKSTREAM: make the stream if it does not already exist
+
+XGROUP CREATECONSUMER fruits fruits-group worker-1
+// fruits: key of stream
+// fruits-group: name of the group
+// worker-1: name of the new consumer
+
+XINFO GROUPS fruits // "last-delivered-id",
+// pending 0 means no pernding messages
+// "last-delivered-id", // keeps track of what the last delivered id is
+
+XINFO CONSUMERS fruits fruits-group // told about the 2 workers
