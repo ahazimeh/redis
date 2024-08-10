@@ -42,7 +42,27 @@ XGROUP CREATECONSUMER fruits fruits-group worker-1
 // worker-1: name of the new consumer
 
 XINFO GROUPS fruits // "last-delivered-id",
-// pending 0 means no pernding messages
+// pending 0 means no pending messages
 // "last-delivered-id", // keeps track of what the last delivered id is
 
 XINFO CONSUMERS fruits fruits-group // told about the 2 workers
+
+
+/////////////////////
+DEL fruites
+// DEL fuits-group
+FLUSHALL 
+XGROUP CREATE fruits fruits-group $ MKSTREAM
+XGROUP CREATECONSUMER fruits fruits-group worker-1
+XGROUP CREATECONSUMER fruits fruits-group worker-2
+// Don't specify an ID, let Redis do it with *!
+XADD fruits 10-0 name banana color yellow
+XADD fruits 20-0 name apple color red
+XADD fruits 30-0 name orange color orange 
+
+XREADGROUP GROUP fruits-group worker-1 COUNT 1 STREAMS fruits > // > to get back any unread messages
+
+to acknowledged the messages
+XACK fruits fruits-group 10-0
+
+XAUTOCLAIM fruits fruits-group worker-2 10000 0-0 // pending messages that have not been claimed go to worker-2 in case that other worker has crashed
